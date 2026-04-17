@@ -28,6 +28,33 @@
   --color-text: var(--ix-text);
 }
 
+/* ─── Light mode overrides ─── */
+[data-theme="light"] {
+  --ix-night: #f7f8fc;
+  --ix-night-soft: #eef1f7;
+  --ix-panel: #ffffff;
+  --ix-panel-soft: #f4f6fb;
+  --ix-cyan: #0ea5c8;
+  --ix-mint: #5ed4e8;
+  --ix-purple: #7c4db8;
+  --ix-pink: #c84fa0;
+  --ix-sand: #a85690;
+  --ix-coral: #d85540;
+  --ix-text: #0c1d31;
+  --ix-muted: rgba(12, 29, 49, 0.6);
+  --ix-border: rgba(12, 29, 49, 0.08);
+  --ix-shadow-soft: 0 24px 60px rgba(12, 29, 49, 0.05);
+  --ix-shadow-strong: 0 34px 90px rgba(12, 29, 49, 0.08);
+
+  --color-background: var(--ix-night);
+  --color-background-soft: var(--ix-night-soft);
+  --color-background-mute: var(--ix-panel);
+  --color-border: var(--ix-border);
+  --color-border-hover: rgba(12, 29, 49, 0.18);
+  --color-heading: var(--ix-text);
+  --color-text: var(--ix-text);
+}
+
 *,
 *::before,
 *::after {
@@ -45,4 +72,5 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background 0.4s ease, color 0.4s ease;
 }

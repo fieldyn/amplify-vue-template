@@ -7,15 +7,12 @@ import { Amplify } from "aws-amplify";
 async function bootstrap() {
   try {
     const response = await fetch("/amplify_outputs.json");
-    if (!response.ok) {
-      throw new Error("amplify_outputs.json not available");
+    if (response.ok) {
+      const outputs = await response.json();
+      Amplify.configure(outputs);
     }
-
-    const outputs = await response.json();
-    Amplify.configure(outputs);
-    (globalThis as typeof globalThis & { __AMPLIFY_CONFIGURED__?: boolean }).__AMPLIFY_CONFIGURED__ = true;
   } catch {
-    (globalThis as typeof globalThis & { __AMPLIFY_CONFIGURED__?: boolean }).__AMPLIFY_CONFIGURED__ = false;
+    // Amplify not configured — landing page works without it
   }
 
   createApp(App).mount("#app");
