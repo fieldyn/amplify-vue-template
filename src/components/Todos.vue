@@ -24,28 +24,24 @@ function listTodos() {
 }
 
 function createTodo() {
+  const content = window.prompt('Todo content')?.trim();
+  if (!content) {
+    return;
+  }
+
   if (!client) {
+    todos.value = [{ id: window.crypto.randomUUID(), content }, ...todos.value];
     return;
   }
 
   client.models.Todo.create({
-    content: window.prompt('Todo content'),
+    content,
   }).then(() => {
     listTodos();
   });
 }
 
 onMounted(() => {
-  if (!client) {
-    todos.value = [
-      {
-        id: 'local-demo',
-        content: 'Connect Amplify by generating amplify_outputs.json',
-      },
-    ];
-    return;
-  }
-
   listTodos();
 });
 </script>
@@ -56,12 +52,7 @@ onMounted(() => {
       <img src="/logo.png" alt="InnovatioX" class="logo" />
     </div>
     <h1>My todos</h1>
-    <p v-if="!amplifyConfigured" class="status">
-      Local demo mode: Amplify is not configured yet, so this view is showing a placeholder item.
-    </p>
-    <button :disabled="!amplifyConfigured" @click="createTodo">
-      + new
-    </button>
+    <button @click="createTodo">+ new</button>
     <ul>
       <li
         v-for="todo in todos"
