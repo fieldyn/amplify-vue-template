@@ -1,16 +1,36 @@
 <script setup lang="ts">
-import Todos from './components/Todos.vue'
+import { onMounted } from 'vue'
+import { useTheme } from '@/composables/useTheme'
+import SiteHeader from '@/components/SiteHeader.vue'
+import HeroSection from '@/components/HeroSection.vue'
+import ServicesSection from '@/components/ServicesSection.vue'
+import AboutSection from '@/components/AboutSection.vue'
+import TechSection from '@/components/TechSection.vue'
+import ContactSection from '@/components/ContactSection.vue'
+import SiteFooter from '@/components/SiteFooter.vue'
+
+const { init } = useTheme()
+
+onMounted(() => {
+  init()
+})
 </script>
 
 <template>
-  <main class="app-shell">
-    <Todos />
+  <SiteHeader />
+  <main>
+    <HeroSection />
+    <ServicesSection />
+    <AboutSection />
+    <TechSection />
+    <ContactSection />
   </main>
+  <SiteFooter />
 </template>
 
 <style scoped>
-.app-shell {
+main {
+  position: relative;
   min-height: 100vh;
-  padding: clamp(1rem, 3vw, 2rem);
 }
 </style>

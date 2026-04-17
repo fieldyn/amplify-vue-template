@@ -15,6 +15,16 @@ body {
     linear-gradient(180deg, rgba(12, 29, 49, 0.95), rgba(4, 17, 31, 1));
   min-height: 100vh;
   color: var(--ix-text);
+  transition: background 0.5s ease;
+}
+
+[data-theme="light"] body {
+  background: var(--ix-night);
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(14, 165, 200, 0.06) 0%, transparent 30%),
+    radial-gradient(circle at 82% 14%, rgba(124, 77, 184, 0.05) 0%, transparent 28%),
+    radial-gradient(circle at 55% 100%, rgba(200, 79, 160, 0.04) 0%, transparent 30%),
+    linear-gradient(180deg, #f7f8fc, #eef1f7);
 }
 
 body::before {
@@ -28,6 +38,18 @@ body::before {
   mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.42), transparent 88%);
   pointer-events: none;
   opacity: 0.3;
+  transition: opacity 0.5s ease;
+}
+
+[data-theme="light"] body::before {
+  background-image:
+    linear-gradient(rgba(12, 29, 49, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(12, 29, 49, 0.04) 1px, transparent 1px);
+  opacity: 0.15;
+}
+
+[data-theme="light"] html {
+  background: #f7f8fc;
 }
 
 #app {
@@ -60,6 +82,11 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
+[data-theme="light"] button:focus,
+[data-theme="light"] button:focus-visible {
+  outline-color: rgba(14, 165, 200, 0.5);
+}
+
 input,
 textarea {
   font: inherit;
@@ -71,6 +98,6 @@ ul {
 }
 
 ::selection {
-  background: rgba(255, 201, 133, 0.28);
+  background: rgba(92, 224, 248, 0.24);
   color: var(--ix-text);
 }
