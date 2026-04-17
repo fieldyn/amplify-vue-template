@@ -35,11 +35,14 @@ function createTodo() {
 
 <template>
   <main>
+    <div class="logo-container">
+      <img src="/logo.png" alt="Logo" class="logo" />
+    </div>
     <h1>My todos</h1>
     <button @click="createTodo">+ new</button>
     <ul>
-      <li 
-        v-for="todo in todos" 
+      <li
+        v-for="todo in todos"
         :key="todo.id">
         {{ todo.content }}
       </li>
@@ -53,3 +56,16 @@ function createTodo() {
     </div>
   </main>
 </template>
+
+<style scoped>
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.logo {
+  max-width: 200px;
+  height: auto;
+}
+</style>
