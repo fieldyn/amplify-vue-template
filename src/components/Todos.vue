@@ -4,39 +4,52 @@ import { onMounted, ref } from 'vue';
 import type { Schema } from '../../amplify/data/resource';
 import { generateClient } from 'aws-amplify/data';
 
-const client = generateClient<Schema>();
+type TodoItem = Pick<Schema['Todo']['type'], 'id' | 'content'>;
 
-// create a reactive reference to the array of todos
-const todos = ref<Array<Schema['Todo']["type"]>>([]);
+const amplifyConfigured =
+  (globalThis as typeof globalThis & { __AMPLIFY_CONFIGURED__?: boolean }).__AMPLIFY_CONFIGURED__ === true;
+const client = amplifyConfigured ? generateClient<Schema>() : null;
+const todos = ref<TodoItem[]>([]);
 
 function listTodos() {
+  if (!client) {
+    return;
+  }
+
   client.models.Todo.observeQuery().subscribe({
-    next: ({ items, isSynced }) => {
-      todos.value = items
-     },
-  }); 
+    next: ({ items }) => {
+      todos.value = items;
+    },
+  });
 }
 
 function createTodo() {
+  const content = window.prompt('Todo content')?.trim();
+  if (!content) {
+    return;
+  }
+
+  if (!client) {
+    todos.value = [{ id: window.crypto.randomUUID(), content }, ...todos.value];
+    return;
+  }
+
   client.models.Todo.create({
-    content: window.prompt("Todo content")
+    content,
   }).then(() => {
-    // After creating a new todo, update the list of todos
     listTodos();
   });
 }
-    
-// fetch todos when the component is mounted
- onMounted(() => {
+
+onMounted(() => {
   listTodos();
 });
-
 </script>
 
 <template>
   <main>
     <div class="logo-container">
-      <img src="/logo.png" alt="Logo" class="logo" />
+      <img src="/logo.png" alt="InnovatioX" class="logo" />
     </div>
     <h1>My todos</h1>
     <button @click="createTodo">+ new</button>
@@ -47,7 +60,7 @@ function createTodo() {
         {{ todo.content }}
       </li>
     </ul>
-    <div>
+    <div class="footer">
       🥳 App successfully hosted. Try creating a new todo.
       <br />
       <a href="https://docs.amplify.aws/gen2/start/quickstart/nextjs-pages-router/">
@@ -65,7 +78,23 @@ function createTodo() {
 }
 
 .logo {
-  max-width: 200px;
+  max-width: 180px;
   height: auto;
+  filter: drop-shadow(0 0 24px rgba(94, 206, 240, 0.25));
+}
+
+.status {
+  margin: 0 0 1rem;
+  color: var(--ix-text-muted);
+  text-align: center;
+  font-size: 0.92em;
+}
+
+.footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: var(--ix-text-muted);
+  font-size: 0.9em;
+  line-height: 1.7;
 }
 </style>
