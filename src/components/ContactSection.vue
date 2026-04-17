@@ -21,7 +21,7 @@ const { isVisible } = useReveal(sectionRef)
       </p>
 
       <div class="contact__actions">
-        <a href="mailto:hello@innovatiox.com" class="contact__btn contact__btn--primary">
+        <a href="mailto:info@innovatiox.com" class="contact__btn contact__btn--primary">
           Get in Touch
         </a>
         <a
