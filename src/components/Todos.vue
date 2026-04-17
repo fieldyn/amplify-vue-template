@@ -1,100 +1,111 @@
 <script setup lang="ts">
-import '@/assets/main.css';
-import { onMounted, ref } from 'vue';
-import type { Schema } from '../../amplify/data/resource';
-import { generateClient } from 'aws-amplify/data';
+import { computed, shallowRef } from 'vue'
 
-type TodoItem = Pick<Schema['Todo']['type'], 'id' | 'content'>;
+import { useTodos } from '@/composables/useTodos'
 
-const amplifyConfigured =
-  (globalThis as typeof globalThis & { __AMPLIFY_CONFIGURED__?: boolean }).__AMPLIFY_CONFIGURED__ === true;
-const client = amplifyConfigured ? generateClient<Schema>() : null;
-const todos = ref<TodoItem[]>([]);
+import TodoComposer from './todos/TodoComposer.vue'
+import TodoHero from './todos/TodoHero.vue'
+import TodoList from './todos/TodoList.vue'
 
-function listTodos() {
-  if (!client) {
-    return;
+const { todos, isConnected, isSyncing, isSubmitting, errorMessage, createTodo } = useTodos()
+
+const draft = shallowRef('')
+
+const previewItems = computed(() => todos.value.slice(0, 3))
+const todoCount = computed(() => todos.value.length)
+
+async function handleCreate() {
+  const wasCreated = await createTodo(draft.value)
+
+  if (wasCreated) {
+    draft.value = ''
   }
-
-  client.models.Todo.observeQuery().subscribe({
-    next: ({ items }) => {
-      todos.value = items;
-    },
-  });
 }
-
-function createTodo() {
-  const content = window.prompt('Todo content')?.trim();
-  if (!content) {
-    return;
-  }
-
-  if (!client) {
-    todos.value = [{ id: window.crypto.randomUUID(), content }, ...todos.value];
-    return;
-  }
-
-  client.models.Todo.create({
-    content,
-  }).then(() => {
-    listTodos();
-  });
-}
-
-onMounted(() => {
-  listTodos();
-});
 </script>
 
 <template>
-  <main>
-    <div class="logo-container">
-      <img src="/logo.png" alt="InnovatioX" class="logo" />
+  <section class="todos-experience">
+    <TodoHero
+      :is-connected="isConnected"
+      :preview-items="previewItems"
+      :todo-count="todoCount" />
+
+    <div class="todos-grid">
+      <TodoComposer
+        v-model="draft"
+        :is-submitting="isSubmitting"
+        @create="handleCreate" />
+
+      <TodoList
+        :error-message="errorMessage"
+        :is-syncing="isSyncing"
+        :items="todos" />
     </div>
-    <h1>My todos</h1>
-    <button @click="createTodo">+ new</button>
-    <ul>
-      <li
-        v-for="todo in todos"
-        :key="todo.id">
-        {{ todo.content }}
-      </li>
-    </ul>
-    <div class="footer">
-      🥳 App successfully hosted. Try creating a new todo.
-      <br />
-      <a href="https://docs.amplify.aws/gen2/start/quickstart/nextjs-pages-router/">
-        Review next steps of this tutorial.
-      </a>
-    </div>
-  </main>
+
+    <footer class="todos-footer">
+      <span class="todos-footer__eyebrow">Amplify • Gen 2</span>
+      <p class="todos-footer__copy">
+        Realtime updates stay in the frame, while the docs stay one click away.
+        <a
+          class="todos-footer__link"
+          href="https://docs.amplify.aws/gen2/start/quickstart/nextjs-pages-router/">
+          Review next steps
+        </a>
+      </p>
+    </footer>
+  </section>
 </template>
 
 <style scoped>
-.logo-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2rem;
+.todos-experience {
+  display: grid;
+  gap: 1.5rem;
+  width: min(1180px, 100%);
+  margin: 0 auto;
 }
 
-.logo {
-  max-width: 180px;
-  height: auto;
-  filter: drop-shadow(0 0 24px rgba(94, 206, 240, 0.25));
+.todos-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
 }
 
-.status {
-  margin: 0 0 1rem;
-  color: var(--ix-text-muted);
-  text-align: center;
-  font-size: 0.92em;
+.todos-footer {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0 0.35rem;
 }
 
-.footer {
-  margin-top: 1.5rem;
-  text-align: center;
-  color: var(--ix-text-muted);
-  font-size: 0.9em;
-  line-height: 1.7;
+.todos-footer__eyebrow {
+  font-family: var(--font-tech);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ix-cyan);
+}
+
+.todos-footer__copy {
+  max-width: 48rem;
+  color: var(--ix-muted);
+  font-size: 1rem;
+}
+
+.todos-footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: 0.3rem;
+  color: var(--ix-sand);
+}
+
+.todos-footer__link:hover {
+  color: var(--ix-cyan);
+}
+
+@media (max-width: 920px) {
+  .todos-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

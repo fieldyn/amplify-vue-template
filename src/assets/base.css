@@ -1,22 +1,28 @@
-/* InnovatioX color palette — derived from logo */
 :root {
-  --ix-navy: #0d1b2a;
-  --ix-navy-light: #1b2838;
-  --ix-navy-mid: #243447;
-  --ix-cyan: #5ecef0;
-  --ix-purple: #9b40d0;
-  --ix-pink: #e060c0;
-  --ix-text: #e8eaf0;
-  --ix-text-muted: rgba(232, 234, 240, 0.55);
-  --ix-glow: rgba(94, 206, 240, 0.15);
-  --ix-gradient: linear-gradient(135deg, #5ecef0, #9b40d0, #e060c0);
+  --ix-night: #04111f;
+  --ix-night-soft: #0c1d31;
+  --ix-panel: #10243d;
+  --ix-panel-soft: #163251;
+  --ix-cyan: #8ce0ff;
+  --ix-mint: #82f0d2;
+  --ix-sand: #ffc985;
+  --ix-coral: #ff7d67;
+  --ix-text: #f5f2ea;
+  --ix-muted: rgba(231, 238, 243, 0.64);
+  --ix-border: rgba(140, 224, 255, 0.16);
+  --ix-shadow-soft: 0 24px 60px rgba(2, 8, 15, 0.28);
+  --ix-shadow-strong: 0 34px 90px rgba(2, 8, 15, 0.42);
 
-  --color-background: var(--ix-navy);
-  --color-background-soft: var(--ix-navy-light);
-  --color-background-mute: var(--ix-navy-mid);
-  --color-border: rgba(94, 206, 240, 0.12);
-  --color-border-hover: rgba(94, 206, 240, 0.3);
-  --color-heading: #ffffff;
+  --font-display: 'Newsreader', serif;
+  --font-body: 'Source Sans 3', sans-serif;
+  --font-tech: 'Chakra Petch', sans-serif;
+
+  --color-background: var(--ix-night);
+  --color-background-soft: var(--ix-night-soft);
+  --color-background-mute: var(--ix-panel);
+  --color-border: var(--ix-border);
+  --color-border-hover: rgba(140, 224, 255, 0.32);
+  --color-heading: var(--ix-text);
   --color-text: var(--ix-text);
 }
 
@@ -25,31 +31,15 @@
 *::after {
   box-sizing: border-box;
   margin: 0;
-  font-weight: normal;
 }
 
 body {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
   line-height: 1.6;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
-  font-size: 15px;
+  font-family: var(--font-body);
+  font-size: 16px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
