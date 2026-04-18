@@ -1,76 +1,109 @@
-:root {
-  --ix-night: #04111f;
-  --ix-night-soft: #0c1d31;
-  --ix-panel: #10243d;
-  --ix-panel-soft: #163251;
-  --ix-cyan: #5ce0f8;
-  --ix-mint: #a8f0ff;
-  --ix-purple: #9b6dd7;
-  --ix-pink: #e472c4;
-  --ix-sand: #f5a0d0;
-  --ix-coral: #ff7d67;
-  --ix-text: #f5f2ea;
-  --ix-muted: rgba(231, 238, 243, 0.64);
-  --ix-border: rgba(140, 224, 255, 0.16);
-  --ix-shadow-soft: 0 24px 60px rgba(2, 8, 15, 0.28);
-  --ix-shadow-strong: 0 34px 90px rgba(2, 8, 15, 0.42);
-
-  --font-display: 'Newsreader', serif;
-  --font-body: 'Source Sans 3', sans-serif;
-  --font-tech: 'Chakra Petch', sans-serif;
-
-  --color-background: var(--ix-night);
-  --color-background-soft: var(--ix-night-soft);
-  --color-background-mute: var(--ix-panel);
-  --color-border: var(--ix-border);
-  --color-border-hover: rgba(140, 224, 255, 0.32);
-  --color-heading: var(--ix-text);
-  --color-text: var(--ix-text);
-}
-
-/* ─── Light mode overrides ─── */
-[data-theme="light"] {
-  --ix-night: #f7f8fc;
-  --ix-night-soft: #eef1f7;
-  --ix-panel: #ffffff;
-  --ix-panel-soft: #f4f6fb;
-  --ix-cyan: #0ea5c8;
-  --ix-mint: #5ed4e8;
-  --ix-purple: #7c4db8;
-  --ix-pink: #c84fa0;
-  --ix-sand: #a85690;
-  --ix-coral: #d85540;
-  --ix-text: #0c1d31;
-  --ix-muted: rgba(12, 29, 49, 0.6);
-  --ix-border: rgba(12, 29, 49, 0.08);
-  --ix-shadow-soft: 0 24px 60px rgba(12, 29, 49, 0.05);
-  --ix-shadow-strong: 0 34px 90px rgba(12, 29, 49, 0.08);
-
-  --color-background: var(--ix-night);
-  --color-background-soft: var(--ix-night-soft);
-  --color-background-mute: var(--ix-panel);
-  --color-border: var(--ix-border);
-  --color-border-hover: rgba(12, 29, 49, 0.18);
-  --color-heading: var(--ix-text);
-  --color-text: var(--ix-text);
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
+html {
+  background: var(--ix-bg);
+  scroll-behavior: smooth;
 }
 
 body {
+  margin: 0;
+  position: relative;
+  overflow-x: hidden;
+  background: var(--ix-bg);
+  background-image:
+    radial-gradient(900px 500px at 8% -8%, rgba(56, 189, 248, 0.12) 0%, transparent 60%),
+    radial-gradient(700px 600px at 95% 8%, rgba(168, 85, 247, 0.10) 0%, transparent 60%),
+    radial-gradient(800px 600px at 50% 105%, rgba(139, 92, 246, 0.08) 0%, transparent 60%);
   min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
-  line-height: 1.6;
-  font-family: var(--font-body);
-  font-size: 16px;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transition: background 0.4s ease, color 0.4s ease;
+  color: var(--ix-text);
+  transition: background 0.5s ease;
+}
+
+[data-theme="light"] body {
+  background-image:
+    radial-gradient(900px 500px at 8% -8%, rgba(56, 189, 248, 0.10) 0%, transparent 60%),
+    radial-gradient(700px 600px at 95% 8%, rgba(168, 85, 247, 0.06) 0%, transparent 60%),
+    radial-gradient(800px 600px at 50% 105%, rgba(139, 92, 246, 0.05) 0%, transparent 60%);
+}
+
+/* Subtle dotted/grid backdrop */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    rgba(148, 163, 184, 0.18) 1px,
+    transparent 1px
+  );
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.55) 0%, transparent 75%);
+  pointer-events: none;
+  opacity: 0.18;
+  z-index: 0;
+  transition: opacity 0.4s ease;
+}
+
+[data-theme="light"] body::before {
+  background-image: radial-gradient(
+    circle,
+    rgba(15, 23, 42, 0.18) 1px,
+    transparent 1px
+  );
+  opacity: 0.10;
+}
+
+#app {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  z-index: 1;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  background: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease,
+    background 0.2s ease;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--ix-sky);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+input,
+textarea {
+  font: inherit;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+::selection {
+  background: rgba(139, 92, 246, 0.32);
+  color: var(--ix-text);
+}
+
+/* Reusable container */
+.ix-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
 }
